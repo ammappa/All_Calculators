@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ClipboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ClipboardEvent, type MouseEvent } from "react";
 import {
     Bold,
     Heading2,
@@ -49,6 +49,7 @@ export default function RichTextEditor({
     className,
 }: RichTextEditorProps) {
     const editorRef = useRef<HTMLDivElement | null>(null);
+    const selectionRangeRef = useRef<Range | null>(null);
     const [toolbarState, setToolbarState] = useState<ToolbarState>(defaultToolbarState);
 
     const isEmpty = useMemo(() => {
@@ -83,6 +84,10 @@ export default function RichTextEditor({
                 return;
             }
 
+            if (selection && selection.rangeCount > 0) {
+                selectionRangeRef.current = selection.getRangeAt(0).cloneRange();
+            }
+
             const block = (document.queryCommandValue("formatBlock") || "p")
                 .toString()
                 .replace(/[<>]/g, "")
@@ -112,9 +117,33 @@ export default function RichTextEditor({
         onChange(editorRef.current?.innerHTML ?? "");
     };
 
+    const restoreSelection = () => {
+        const selection = document.getSelection();
+        const range = selectionRangeRef.current;
+
+        if (!selection || !range) {
+            return;
+        }
+
+        selection.removeAllRanges();
+        selection.addRange(range);
+    };
+
+    const handleToolbarMouseDown = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        restoreSelection();
+    };
+
     const runCommand = (command: string, valueArg?: string) => {
         editorRef.current?.focus();
+        restoreSelection();
         document.execCommand(command, false, valueArg);
+        const selection = document.getSelection();
+
+        if (selection && selection.rangeCount > 0) {
+            selectionRangeRef.current = selection.getRangeAt(0).cloneRange();
+        }
+
         syncContent();
     };
 
@@ -141,11 +170,12 @@ export default function RichTextEditor({
 
     return (
         <div className={cn("space-y-0", className)}>
-            <div className="flex flex-wrap gap-2 rounded-t-lg border border-b-0 bg-muted/40 p-3">
+            <div className="sticky top-4 z-20 flex flex-wrap gap-2 rounded-t-lg border border-b-0 bg-background/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-background/90">
                 <Button
                     type="button"
                     size="sm"
                     variant={toolbarState.block === "p" ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => setBlock("p")}
                 >
                     <Pilcrow className="h-4 w-4" />
@@ -154,6 +184,7 @@ export default function RichTextEditor({
                     type="button"
                     size="sm"
                     variant={toolbarState.block === "h2" ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => setBlock("h2")}
                 >
                     <Heading2 className="h-4 w-4" />
@@ -162,6 +193,7 @@ export default function RichTextEditor({
                     type="button"
                     size="sm"
                     variant={toolbarState.block === "h3" ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => setBlock("h3")}
                 >
                     <Heading3 className="h-4 w-4" />
@@ -170,6 +202,7 @@ export default function RichTextEditor({
                     type="button"
                     size="sm"
                     variant={toolbarState.bold ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => runCommand("bold")}
                 >
                     <Bold className="h-4 w-4" />
@@ -178,6 +211,7 @@ export default function RichTextEditor({
                     type="button"
                     size="sm"
                     variant={toolbarState.italic ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => runCommand("italic")}
                 >
                     <Italic className="h-4 w-4" />
@@ -186,6 +220,7 @@ export default function RichTextEditor({
                     type="button"
                     size="sm"
                     variant={toolbarState.underline ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => runCommand("underline")}
                 >
                     <Underline className="h-4 w-4" />
@@ -194,6 +229,7 @@ export default function RichTextEditor({
                     type="button"
                     size="sm"
                     variant={toolbarState.unordered ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => runCommand("insertUnorderedList")}
                 >
                     <List className="h-4 w-4" />
@@ -202,6 +238,7 @@ export default function RichTextEditor({
                     type="button"
                     size="sm"
                     variant={toolbarState.ordered ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => runCommand("insertOrderedList")}
                 >
                     <ListOrdered className="h-4 w-4" />
@@ -210,11 +247,18 @@ export default function RichTextEditor({
                     type="button"
                     size="sm"
                     variant={toolbarState.block === "blockquote" ? "default" : "outline"}
+                    onMouseDown={handleToolbarMouseDown}
                     onClick={() => setBlock("blockquote")}
                 >
                     <Quote className="h-4 w-4" />
                 </Button>
-                <Button type="button" size="sm" variant="outline" onClick={handleAddLink}>
+                <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onMouseDown={handleToolbarMouseDown}
+                    onClick={handleAddLink}
+                >
                     <Link2 className="h-4 w-4" />
                 </Button>
             </div>
