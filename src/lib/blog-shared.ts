@@ -26,7 +26,22 @@ type BlogSource = {
     updatedAt?: Date | string;
 };
 
-const allowedTags = ["a", "blockquote", "br", "em", "h2", "h3", "i", "li", "ol", "p", "strong", "u", "ul"];
+const allowedTags = [
+    "a",
+    "b",
+    "blockquote",
+    "br",
+    "em",
+    "h2",
+    "h3",
+    "i",
+    "li",
+    "ol",
+    "p",
+    "strong",
+    "u",
+    "ul",
+];
 
 export function slugify(value: string) {
     return value
@@ -63,12 +78,78 @@ function normalizeAnchor(tag: string) {
     return `<a href="${href.replace(/"/g, "&quot;")}" target="_blank" rel="noopener noreferrer">`;
 }
 
+type InlineFormatState = {
+    bold: boolean;
+    italic: boolean;
+    underline: boolean;
+};
+
+function extractInlineFormat(styleValue: string): InlineFormatState {
+    const normalizedStyle = styleValue.toLowerCase();
+
+    return {
+        bold: /font-weight\s*:\s*(bold|[6-9]00)/.test(normalizedStyle),
+        italic: /font-style\s*:\s*italic/.test(normalizedStyle),
+        underline: /text-decoration(?:-line)?\s*:\s*[^;"']*underline/.test(normalizedStyle),
+    };
+}
+
+function normalizeInlineFormatting(input: string) {
+    const spanStack: InlineFormatState[] = [];
+
+    return input.replace(/<span\b([^>]*)>|<\/span>/gi, (tag, attributes = "") => {
+        if (/^<\/span>/i.test(tag)) {
+            const format = spanStack.pop();
+
+            if (!format) {
+                return "";
+            }
+
+            let closingMarkup = "";
+
+            if (format.underline) {
+                closingMarkup += "</u>";
+            }
+
+            if (format.italic) {
+                closingMarkup += "</em>";
+            }
+
+            if (format.bold) {
+                closingMarkup += "</strong>";
+            }
+
+            return closingMarkup;
+        }
+
+        const styleMatch = attributes.match(/\sstyle=(["'])(.*?)\1/i);
+        const format = extractInlineFormat(styleMatch?.[2] ?? "");
+        spanStack.push(format);
+
+        let openingMarkup = "";
+
+        if (format.bold) {
+            openingMarkup += "<strong>";
+        }
+
+        if (format.italic) {
+            openingMarkup += "<em>";
+        }
+
+        if (format.underline) {
+            openingMarkup += "<u>";
+        }
+
+        return openingMarkup;
+    });
+}
+
 export function sanitizeBlogContentHtml(input: string) {
     if (!input.trim()) {
         return "";
     }
 
-    const withoutUnsafeBlocks = input
+    const withoutUnsafeBlocks = normalizeInlineFormatting(input)
         .replace(/<!--[\s\S]*?-->/g, "")
         .replace(
             /<(script|style|iframe|object|embed|form|input|textarea|button|select|option|video|audio|svg|math)[^>]*>[\s\S]*?<\/\1>/gi,
@@ -89,23 +170,29 @@ export function sanitizeBlogContentHtml(input: string) {
         const nameMatch = tag.match(/^<\/?\s*([a-z0-9]+)/i);
         const tagName = nameMatch?.[1]?.toLowerCase();
 
-        if (!tagName || !allowedTags.includes(tagName)) {
+        if (!tagName) {
+            return "";
+        }
+
+        const normalizedTagName = tagName === "b" ? "strong" : tagName;
+
+        if (!allowedTags.includes(tagName) && !allowedTags.includes(normalizedTagName)) {
             return "";
         }
 
         if (tag.startsWith("</")) {
-            return `</${tagName}>`;
+            return `</${normalizedTagName}>`;
         }
 
-        if (tagName === "br") {
+        if (normalizedTagName === "br") {
             return "<br>";
         }
 
-        if (tagName === "a") {
+        if (normalizedTagName === "a") {
             return normalizeAnchor(tag);
         }
 
-        return `<${tagName}>`;
+        return `<${normalizedTagName}>`;
     });
 }
 
