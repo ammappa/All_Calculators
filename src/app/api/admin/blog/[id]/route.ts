@@ -137,6 +137,7 @@ export async function PUT(
 
         const body = await request.json();
         const title = String(body.title ?? "").trim();
+        const seoTitle = String(body.seoTitle ?? "").trim();
         const category = String(body.category ?? "").trim();
         const date = String(body.date ?? "").trim();
         const imageUrl = String(body.imageUrl ?? "").trim();
@@ -158,6 +159,7 @@ export async function PUT(
         const previousImageUrl = existing.imageUrl;
 
         existing.title = title;
+        existing.seoTitle = seoTitle;
         existing.slug = slug;
         existing.category = category;
         existing.date = date;

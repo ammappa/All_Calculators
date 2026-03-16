@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,6 +12,40 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
+
+export async function generateMetadata(
+    props: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+    const { id } = await props.params;
+    const post = await getBlogPostBySlug(id);
+
+    if (!post) {
+        return {
+            title: "Blog",
+            description: "Read the latest calculator guides and articles.",
+        };
+    }
+
+    return {
+        title: post.seoTitle || post.title,
+        description: post.excerpt,
+        alternates: {
+            canonical: `/blog/${post.slug}`,
+        },
+        openGraph: {
+            title: post.seoTitle || post.title,
+            description: post.excerpt,
+            images: post.imageUrl ? [{ url: post.imageUrl }] : undefined,
+            type: "article",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: post.seoTitle || post.title,
+            description: post.excerpt,
+            images: post.imageUrl ? [post.imageUrl] : undefined,
+        },
+    };
+}
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
     const { id } = await props.params;

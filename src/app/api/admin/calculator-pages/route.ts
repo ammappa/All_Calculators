@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 import { requireAdminApiSession } from "@/lib/admin-guard";
 import {
@@ -65,12 +66,20 @@ export async function PATCH(request: NextRequest) {
             cardDescription: body?.cardDescription,
             pageHeading: body?.pageHeading,
             pageIntro: body?.pageIntro,
+            seoTitle: body?.seoTitle,
             seoDescription: body?.seoDescription,
             contentTitle: body?.contentTitle,
             contentIntro: body?.contentIntro,
             contentHtml: body?.contentHtml,
             faqItems: body?.faqItems,
         });
+
+        revalidateTag("calculator-page-metadata", "max");
+        revalidatePath(item.path);
+
+        if (item.path !== "/calculators") {
+            revalidatePath("/calculators");
+        }
 
         return NextResponse.json(
             {
@@ -84,6 +93,8 @@ export async function PATCH(request: NextRequest) {
         return getErrorResponse(error, "Failed to update calculator page content.");
     }
 }
+
+
 
 
 

@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface IBlogPost extends Document {
     title: string;
+    seoTitle: string;
     slug: string;
     category: string;
     date: string;
@@ -18,6 +19,11 @@ const BlogPostSchema = new Schema<IBlogPost>(
         title: {
             type: String,
             required: [true, "Title is required"],
+            trim: true,
+        },
+        seoTitle: {
+            type: String,
+            default: "",
             trim: true,
         },
         slug: {

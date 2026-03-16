@@ -29,6 +29,7 @@ export type CalculatorPageContentRecord = {
     cardDescription: string;
     pageHeading: string;
     pageIntro: string;
+    seoTitle: string;
     seoDescription: string;
     contentTitle: string;
     contentIntro: string;
@@ -48,6 +49,7 @@ type CalculatorContentSource = {
     cardDescription?: string;
     pageHeading?: string;
     pageIntro?: string;
+    seoTitle?: string;
     seoDescription?: string;
     contentTitle?: string;
     contentIntro?: string;
@@ -131,6 +133,7 @@ function serializeCalculatorPageContent(
     const cardDescription = String(source?.cardDescription ?? "").trim();
     const pageHeading = String(source?.pageHeading ?? "").trim();
     const pageIntro = String(source?.pageIntro ?? "").trim();
+    const seoTitle = String(source?.seoTitle ?? "").trim();
     const seoDescription = String(source?.seoDescription ?? "").trim();
     const contentTitle = String(source?.contentTitle ?? "").trim();
     const contentIntro = String(source?.contentIntro ?? "").trim();
@@ -138,7 +141,7 @@ function serializeCalculatorPageContent(
     const hasCardOverrides =
         cardTitle.length > 0 || cardSubTitle.length > 0 || cardDescription.length > 0;
     const hasHeroOverrides = pageHeading.length > 0 || pageIntro.length > 0;
-    const hasSeoOverrides = seoDescription.length > 0;
+    const hasSeoOverrides = seoTitle.length > 0 || seoDescription.length > 0;
     const hasCustomContent =
         contentTitle.length > 0 ||
         contentIntro.length > 0 ||
@@ -160,6 +163,7 @@ function serializeCalculatorPageContent(
         cardDescription,
         pageHeading,
         pageIntro,
+        seoTitle,
         seoDescription,
         contentTitle,
         contentIntro,
@@ -235,6 +239,7 @@ type UpdateCalculatorPageContentInput = {
     cardDescription?: string;
     pageHeading?: string;
     pageIntro?: string;
+    seoTitle?: string;
     seoDescription?: string;
     contentTitle?: string;
     contentIntro?: string;
@@ -257,6 +262,7 @@ export async function updateCalculatorPageContent(
     const cardDescription = String(input.cardDescription ?? "").trim();
     const pageHeading = String(input.pageHeading ?? "").trim();
     const pageIntro = String(input.pageIntro ?? "").trim();
+    const seoTitle = String(input.seoTitle ?? "").trim();
     const seoDescription = String(input.seoDescription ?? "").trim();
     const contentTitle = String(input.contentTitle ?? "").trim();
     const contentIntro = String(input.contentIntro ?? "").trim();
@@ -268,6 +274,7 @@ export async function updateCalculatorPageContent(
         cardDescription.length > 0 ||
         pageHeading.length > 0 ||
         pageIntro.length > 0 ||
+        seoTitle.length > 0 ||
         seoDescription.length > 0 ||
         contentTitle.length > 0 ||
         contentIntro.length > 0 ||
@@ -294,7 +301,7 @@ export async function updateCalculatorPageContent(
                 cardDescription,
                 pageHeading,
                 pageIntro,
-                seoTitle: "",
+                seoTitle,
                 seoDescription,
                 contentTitle,
                 contentIntro,

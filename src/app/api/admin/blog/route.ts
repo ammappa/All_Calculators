@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
 
         const title = String(body.title ?? "").trim();
+        const seoTitle = String(body.seoTitle ?? "").trim();
         const category = String(body.category ?? "").trim();
         const date = String(body.date ?? "").trim();
         const imageUrl = String(body.imageUrl ?? "").trim();
@@ -100,6 +101,7 @@ export async function POST(request: NextRequest) {
 
         const created = await BlogPost.create({
             title,
+            seoTitle,
             slug,
             category,
             date,

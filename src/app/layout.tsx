@@ -15,8 +15,11 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Calculator App",
-  description: "Top Best calculators",
+  title: {
+    default: "WITHINSECS Calculators",
+    template: "%s | WITHINSECS",
+  },
+  description: "Fast online calculators for finance, health, lifestyle, math, and everyday decisions.",
   alternates: {
     canonical: "/",
   },

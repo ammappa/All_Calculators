@@ -1,6 +1,7 @@
 export type BlogPostRecord = {
     id: string;
     title: string;
+    seoTitle: string;
     slug: string;
     category: string;
     date: string;
@@ -15,6 +16,7 @@ export type BlogPostRecord = {
 type BlogSource = {
     _id?: { toString(): string } | string;
     title?: string;
+    seoTitle?: string;
     slug?: string;
     category?: string;
     date?: string;
@@ -209,6 +211,7 @@ export function serializeBlogPost(post: BlogSource): BlogPostRecord {
     return {
         id: typeof post._id === "string" ? post._id : post._id?.toString?.() ?? "",
         title: post.title ?? "",
+        seoTitle: post.seoTitle ?? "",
         slug: post.slug ?? "",
         category: post.category ?? "",
         date: post.date ?? "",

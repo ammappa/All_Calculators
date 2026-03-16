@@ -1,12 +1,19 @@
+import type { Metadata } from "next";
+
 import Wrapper from "@/app/Wrapper";
 import CalculatorCard from "@/components/Calculators/CalculatorCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getVisibleCalculatorGroupsSafe } from "@/lib/calculator-visibility";
 import { calculatorCategoryLabels, calculatorCategoryOrder } from "@/lib/calculator-catalog";
+import { getCalculatorPageMetadata } from "@/lib/calculator-metadata";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
+
+export async function generateMetadata(): Promise<Metadata> {
+    return getCalculatorPageMetadata("calculators");
+}
 
 export default async function CalculatorsPage() {
     const calculatorGroups = await getVisibleCalculatorGroupsSafe();

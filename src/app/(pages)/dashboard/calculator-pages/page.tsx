@@ -38,6 +38,7 @@ type CalculatorPageContentRecord = {
     cardDescription: string;
     pageHeading: string;
     pageIntro: string;
+    seoTitle: string;
     seoDescription: string;
     contentTitle: string;
     contentIntro: string;
@@ -164,6 +165,7 @@ export default function DashboardCalculatorPagesPage() {
             | "cardDescription"
             | "pageHeading"
             | "pageIntro"
+            | "seoTitle"
             | "seoDescription"
             | "contentTitle"
             | "contentIntro"
@@ -253,6 +255,7 @@ export default function DashboardCalculatorPagesPage() {
                     cardDescription: draft.cardDescription,
                     pageHeading: draft.pageHeading,
                     pageIntro: draft.pageIntro,
+                    seoTitle: draft.seoTitle,
                     seoDescription: draft.seoDescription,
                     contentTitle: draft.contentTitle,
                     contentIntro: draft.contentIntro,
@@ -496,8 +499,8 @@ export default function DashboardCalculatorPagesPage() {
                                     <div className="rounded-lg border bg-slate-50/70 px-4 py-3 text-sm text-muted-foreground">
                                         Card fields control the calculator cards on the public
                                         calculators listing. Top hero fields control the heading and
-                                        intro on the calculator page. SEO fields control the meta
-                                        description. Bottom section fields control the extra
+                                        intro on the calculator page. SEO fields control the title
+                                        tag and meta description. Bottom section fields control the extra
                                         content and FAQ shown below the calculator tool.
                                     </div>
                                 </>
@@ -634,9 +637,25 @@ export default function DashboardCalculatorPagesPage() {
                                             SEO Settings
                                         </h3>
                                         <p className="mt-1 text-sm text-muted-foreground">
-                                            This controls the search engine meta description for
-                                            this calculator page.
+                                            This controls the title tag and search engine meta
+                                            description for this calculator page.
                                         </p>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="seo-title">SEO Title</Label>
+                                        <Input
+                                            id="seo-title"
+                                            value={draft.seoTitle}
+                                            onChange={(event) =>
+                                                updateDraft("seoTitle", event.target.value)
+                                            }
+                                            placeholder={
+                                                draft.pageHeading ||
+                                                draft.defaultTitle ||
+                                                "Enter an SEO page title"
+                                            }
+                                        />
                                     </div>
 
                                     <div className="space-y-2">

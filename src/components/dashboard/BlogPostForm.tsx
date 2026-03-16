@@ -47,6 +47,7 @@ type BlogPostFormProps = {
 function createEmptyState() {
     return {
         title: "",
+        seoTitle: "",
         slug: "",
         category: "",
         date: undefined as Date | undefined,
@@ -75,6 +76,7 @@ export default function BlogPostForm({
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const [title, setTitle] = useState(initialValues?.title ?? "");
+    const [seoTitle, setSeoTitle] = useState(initialValues?.seoTitle ?? "");
     const [slug, setSlug] = useState(initialValues?.slug ?? "");
     const [category, setCategory] = useState(initialValues?.category ?? "");
     const [date, setDate] = useState<Date | undefined>(getInitialDate(initialValues?.date));
@@ -103,6 +105,7 @@ export default function BlogPostForm({
         }
 
         setTitle(initialValues.title ?? "");
+        setSeoTitle(initialValues.seoTitle ?? "");
         setSlug(initialValues.slug ?? "");
         setCategory(initialValues.category ?? "");
         setDate(getInitialDate(initialValues.date));
@@ -139,6 +142,7 @@ export default function BlogPostForm({
     const resetForm = () => {
         const emptyState = createEmptyState();
         setTitle(emptyState.title);
+        setSeoTitle(emptyState.seoTitle);
         setSlug(emptyState.slug);
         setCategory(emptyState.category);
         setDate(emptyState.date);
@@ -226,6 +230,7 @@ export default function BlogPostForm({
                 },
                 body: JSON.stringify({
                     title: title.trim(),
+                    seoTitle: seoTitle.trim(),
                     slug: slug.trim(),
                     category: category.trim(),
                     date: dateLabel,
@@ -295,6 +300,21 @@ export default function BlogPostForm({
                                 />
                             </div>
 
+                            <div className="grid gap-2">
+                                <Label htmlFor="seo-title">SEO Title</Label>
+                                <Input
+                                    id="seo-title"
+                                    placeholder="Best Home Loan EMI Calculator for Fast Monthly Estimates"
+                                    value={seoTitle}
+                                    onChange={(event) => setSeoTitle(event.target.value)}
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Leave blank to use the main article title.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-5 md:grid-cols-2">
                             <div className="grid gap-2">
                                 <Label htmlFor="slug">Slug</Label>
                                 <Input
