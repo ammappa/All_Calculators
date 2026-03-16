@@ -259,47 +259,6 @@ export default function DashboardAdsensePage() {
                 </Card>
             </div>
 
-            <Card className="shadow-sm">
-                <CardHeader>
-                    <CardTitle>Setup Notes</CardTitle>
-                    <CardDescription>
-                        Keep the publisher ID in your environment and manage slot IDs here.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3 text-sm text-muted-foreground">
-                    <p>
-                        Add <span className="font-mono">NEXT_PUBLIC_ADSENSE_CLIENT</span> to{" "}
-                        <span className="font-mono">.env</span> with your approved AdSense
-                        publisher ID, for example{" "}
-                        <span className="font-mono">ca-pub-xxxxxxxxxxxxxxxx</span>.
-                    </p>
-                    <p>
-                        After approval, copy each ad slot ID from AdSense and paste it into the
-                        matching placement card below.
-                    </p>
-                    <div className="flex flex-wrap gap-3">
-                        <Button asChild variant="outline" size="sm">
-                            <Link href="/" target="_blank">
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                View Home
-                            </Link>
-                        </Button>
-                        <Button asChild variant="outline" size="sm">
-                            <Link href="/blog" target="_blank">
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                View Blog
-                            </Link>
-                        </Button>
-                        <Button asChild variant="outline" size="sm">
-                            <Link href="/calculators" target="_blank">
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                View Calculators
-                            </Link>
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
-
             {error ? (
                 <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-sm text-destructive">
                     {error}

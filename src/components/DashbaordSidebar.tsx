@@ -4,6 +4,7 @@ import {
     BadgeDollarSign,
     Calculator,
     FilePenLine,
+    FileText,
     Home,
     LayoutDashboard,
     Mail,
@@ -38,6 +39,11 @@ const items = [
         title: "Calculators",
         url: "calculators",
         icon: Calculator,
+    },
+    {
+        title: "Calculator Pages",
+        url: "calculator-pages",
+        icon: FileText,
     },
     {
         title: "AdSense",

@@ -7,6 +7,7 @@ import {
     BadgeDollarSign,
     Calculator,
     FilePenLine,
+    FileText,
     Newspaper,
     SlidersHorizontal,
     TrendingUp,
@@ -294,6 +295,12 @@ export default function Dashboard() {
                         <Link href="/dashboard/calculators">
                             <SlidersHorizontal className="mr-2 h-4 w-4" />
                             Manage Calculators
+                        </Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                        <Link href="/dashboard/calculator-pages">
+                            <FileText className="mr-2 h-4 w-4" />
+                            Edit Calculator Pages
                         </Link>
                     </Button>
                     <Button asChild variant="outline">

@@ -9,6 +9,7 @@ import {
     type CalculatorCatalogItem,
 } from "@/lib/calculator-catalog";
 import { DBconnection } from "@/lib/db";
+import CalculatorPageContent from "@/models/CalculatorPageContent";
 import CalculatorSettings from "@/models/CalculatorSettings";
 
 const CALCULATOR_SETTINGS_KEY = "global";
@@ -61,25 +62,89 @@ async function readDisabledSlugs() {
     return sanitizeDisabledSlugs(settings?.disabledSlugs ?? []);
 }
 
+async function getCalculatorCardOverrideMap() {
+    await DBconnection();
+
+    const docs = await CalculatorPageContent.find(
+        {},
+        {
+            slug: 1,
+            cardTitle: 1,
+            cardSubTitle: 1,
+            cardDescription: 1,
+        }
+    ).lean();
+
+    return new Map(
+        docs.map((doc) => [
+            doc.slug,
+            {
+                cardTitle: typeof doc.cardTitle === "string" ? doc.cardTitle.trim() : "",
+                cardSubTitle:
+                    typeof doc.cardSubTitle === "string" ? doc.cardSubTitle.trim() : "",
+                cardDescription:
+                    typeof doc.cardDescription === "string" ? doc.cardDescription.trim() : "",
+            },
+        ])
+    );
+}
+
+function applyCalculatorCardOverrides(
+    items: CalculatorCatalogItem[],
+    overrideMap: Map<
+        string,
+        {
+            cardTitle: string;
+            cardSubTitle: string;
+            cardDescription: string;
+        }
+    >
+) {
+    return items.map((item) => {
+        const override = overrideMap.get(item.slug);
+
+        if (!override) {
+            return item;
+        }
+
+        return {
+            ...item,
+            title: override.cardTitle || item.title,
+            subTitle: override.cardSubTitle || item.subTitle,
+            description: override.cardDescription || item.description,
+        };
+    });
+}
+
 export async function getDisabledCalculatorSlugs() {
     return readDisabledSlugs();
 }
 
 export async function getManagedCalculators() {
-    const disabledSlugs = new Set(await readDisabledSlugs());
+    const [disabledSlugs, overrideMap] = await Promise.all([
+        readDisabledSlugs(),
+        getCalculatorCardOverrideMap(),
+    ]);
+    const disabledSlugSet = new Set(disabledSlugs);
+    const catalogWithOverrides = applyCalculatorCardOverrides(calculatorCatalog, overrideMap);
 
     return sortManagedCalculators(
-        calculatorCatalog.map((item) => ({
+        catalogWithOverrides.map((item) => ({
             ...item,
-            enabled: !disabledSlugs.has(item.slug),
+            enabled: !disabledSlugSet.has(item.slug),
         }))
     );
 }
 
 export async function getVisibleCalculatorCatalog() {
-    const disabledSlugs = new Set(await readDisabledSlugs());
+    const [disabledSlugs, overrideMap] = await Promise.all([
+        readDisabledSlugs(),
+        getCalculatorCardOverrideMap(),
+    ]);
+    const disabledSlugSet = new Set(disabledSlugs);
+    const catalogWithOverrides = applyCalculatorCardOverrides(calculatorCatalog, overrideMap);
 
-    return calculatorCatalog.filter((item) => !disabledSlugs.has(item.slug));
+    return catalogWithOverrides.filter((item) => !disabledSlugSet.has(item.slug));
 }
 
 export async function getVisibleCalculatorGroups() {
