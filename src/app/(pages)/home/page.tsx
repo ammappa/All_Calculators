@@ -1,12 +1,13 @@
 import Link from "next/link";
 import {
     ArrowRight,
-    Calculator,
-    Clock3,
+    BriefcaseBusiness,
+    CalendarDays,
+    CheckCircle2,
     HeartPulse,
     Landmark,
-    Sparkles,
     Sigma,
+    Sparkles,
     type LucideIcon,
 } from "lucide-react";
 
@@ -51,22 +52,84 @@ const categoryIconMap: Record<CalculatorCategory, LucideIcon> = {
     math: Sigma,
 };
 
-const featureCards = [
+const contentSections = [
     {
-        title: "Start fast",
-        description: "Open a calculator, type the numbers, and get the result without digging through cluttered menus.",
-        icon: Clock3,
+        eyebrow: "Financial Calculators",
+        title: "Financial calculators for smarter money decisions",
+        intro: "Financial planning becomes easier when you have the right tools. These calculators help users evaluate loans, investments, retirement savings, inflation, debt payoff, and property decisions with more clarity.",
+        icon: Landmark,
+        items: [
+            "Estimate monthly payments and total interest before taking a loan.",
+            "Use mortgage and EMI tools to plan home financing more confidently.",
+            "Project long-term growth with compound interest and retirement savings calculators.",
+            "Compare rent versus buy, evaluate ROI, and review inflation impact over time.",
+            "Check crypto gains, early payoff scenarios, and wealth-building targets in seconds.",
+        ],
     },
     {
-        title: "Stay in one place",
-        description: "Finance, health, lifestyle, and math tools live in one catalog so you do not have to jump across sites.",
-        icon: Calculator,
+        eyebrow: "Health and Fitness",
+        title: "Health and fitness calculators for a better lifestyle",
+        intro: "Wellness calculators make it easier to monitor body metrics, calorie needs, hydration, and planning for important life stages.",
+        icon: HeartPulse,
+        items: [
+            "Estimate body fat percentage and healthy weight ranges.",
+            "Calculate macros for weight loss and daily calorie needs with TDEE-based tools.",
+            "Review daily water intake goals based on activity and routine.",
+            "Track pregnancy timelines with due date planning support.",
+        ],
     },
     {
-        title: "Keep it readable",
-        description: "The layout is built for quick scanning, direct inputs, and simple follow-through to the tool you need.",
-        icon: Sparkles,
+        eyebrow: "Math and Science",
+        title: "Math and scientific calculators for study and problem solving",
+        intro: "Students, engineers, and professionals often need reliable tools for formulas, conversions, and advanced calculations.",
+        icon: Sigma,
+        items: [
+            "Use a scientific calculator online for trigonometry, logarithms, and exponents.",
+            "Solve everyday math with percentage, average, and conversion tools.",
+            "Handle algebra-style tasks and technical calculations without switching sites.",
+            "Work faster on school, office, or technical problems that require precise answers.",
+        ],
     },
+    {
+        eyebrow: "Salary and Business",
+        title: "Salary, freelance, and business calculators",
+        intro: "Income planning is easier when employees, freelancers, and businesses can estimate earnings, pricing, and returns from one place.",
+        icon: BriefcaseBusiness,
+        items: [
+            "Estimate net income with salary after tax style calculations.",
+            "Set better freelance pricing based on income targets and expenses.",
+            "Use ROI-oriented tools to evaluate business and startup decisions.",
+            "Compare financial outcomes quickly before committing to a new plan or investment.",
+        ],
+    },
+    {
+        eyebrow: "Everyday Planning",
+        title: "Everyday planning calculators",
+        intro: "Daily decisions often involve budgeting, scheduling, and planning. Simple calculators reduce guesswork and keep those tasks manageable.",
+        icon: CalendarDays,
+        items: [
+            "Plan wedding budgets with cost estimates for venues, catering, and decorations.",
+            "Estimate travel budgets for transport, accommodation, and daily expenses.",
+            "Calculate exact age from date of birth for records and personal use.",
+            "Handle practical day-to-day calculations without relying on spreadsheets.",
+        ],
+    },
+] as const;
+
+const whyUsePoints = [
+    "Simple and user-friendly calculators",
+    "Accurate formulas and reliable results",
+    "Free tools available instantly online",
+    "Useful for students, professionals, and businesses",
+    "Wide range of financial, health, math, and lifestyle calculators",
+];
+
+const explorePoints = [
+    "Manage loans and personal finances",
+    "Plan investments and retirement savings",
+    "Track health and fitness metrics",
+    "Solve mathematical and scientific problems",
+    "Plan events, travel, and daily activities",
 ];
 
 export default async function Page() {
@@ -126,12 +189,20 @@ export default async function Page() {
 
                         <div className="space-y-5">
                             <h1 className="max-w-4xl text-5xl font-bold tracking-tight text-balance text-slate-950 md:text-6xl xl:text-6xl">
-                                Calculator answers that feel instant, not industrial.
+                                Free online calculators for finance, health, math, and everyday life.
                             </h1>
-                            <p className="max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">
-                                Explore finance, health, lifestyle, and math calculators from one
-                                clean hub. Use the live calculator in the hero or jump directly to
-                                the tools people reach for most.
+                            <p className="max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
+                                Welcome to {siteConfig.name}, a growing platform of free online
+                                calculators built to solve financial, health, math, and daily
+                                planning problems within seconds. Estimate loan payments, review
+                                investment returns, calculate calorie needs, or plan retirement
+                                savings from one clear and easy-to-use place.
+                            </p>
+                            <p className="max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
+                                Our mission is simple: make calculations easy for everyone. From
+                                personal finance to scientific math, {siteConfig.name} helps
+                                individuals, students, professionals, and businesses make smarter
+                                decisions with fast and user-friendly tools.
                             </p>
                         </div>
 
@@ -168,8 +239,8 @@ export default async function Page() {
                                         Featured Calculators
                                     </p>
                                     <p className="mt-2 text-sm leading-7 text-slate-600">
-                                        Jump straight to a live tool instead of scrolling the full
-                                        catalog.
+                                        Jump directly into the most useful tools for finance,
+                                        wellness, and everyday calculations.
                                     </p>
                                 </div>
 
@@ -243,37 +314,104 @@ export default async function Page() {
             </div>
 
             <div className="container mx-auto mt-14 px-4 md:mt-20 2xl:max-w-[1400px]">
+                <div className="rounded-[34px] border border-slate-200/80 bg-white p-6 shadow-[0_30px_90px_-55px_rgba(15,23,42,0.45)] md:p-10">
+                    <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.34em] text-slate-500">
+                                Welcome to {siteConfig.name}
+                            </p>
+                            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+                                Powerful calculators built for faster everyday decisions.
+                            </h2>
+                        </div>
+                        <div className="space-y-5 text-base leading-8 text-slate-600 md:text-lg">
+                            <p>
+                                Financial planning becomes easier when you have the right tools,
+                                and the same is true for health tracking, study support, and
+                                personal planning. This platform brings those calculators together
+                                in one place so users can solve real problems without jumping across
+                                multiple websites.
+                            </p>
+                            <p>
+                                Whether you want to estimate a loan payment, understand inflation,
+                                plan your savings, calculate body metrics, solve math problems, or
+                                organize life events, {siteConfig.name} is designed to give you
+                                accurate answers quickly and keep the experience easy to follow.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="container mx-auto mt-14 px-4 md:mt-20 2xl:max-w-[1400px]">
+                <div className="grid gap-5 xl:grid-cols-2">
+                    {contentSections.map((section) => {
+                        const Icon = section.icon;
+
+                        return (
+                            <section
+                                key={section.title}
+                                className="rounded-[30px] border border-slate-200/80 bg-white p-6 shadow-[0_24px_70px_-52px_rgba(15,23,42,0.38)] md:p-8"
+                            >
+                                <div className="flex items-start gap-4">
+                                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-800">
+                                        <Icon className="h-5 w-5" />
+                                    </span>
+                                    <div>
+                                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                                            {section.eyebrow}
+                                        </p>
+                                        <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl">
+                                            {section.title}
+                                        </h2>
+                                        <p className="mt-4 text-base leading-8 text-slate-600">
+                                            {section.intro}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-6 space-y-4">
+                                    {section.items.map((item) => (
+                                        <div key={item} className="flex items-start gap-3 rounded-2xl bg-slate-50 px-4 py-4">
+                                            <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-sky-600" />
+                                            <p className="text-sm leading-7 text-slate-700 md:text-base">
+                                                {item}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        );
+                    })}
+                </div>
+            </div>
+
+            <div className="container mx-auto mt-14 px-4 md:mt-20 2xl:max-w-[1400px]">
                 <div className="overflow-hidden rounded-[34px] border border-slate-200/80 bg-[linear-gradient(135deg,#ffffff_0%,#eff6ff_45%,#f8fafc_100%)] p-6 shadow-[0_30px_90px_-55px_rgba(15,23,42,0.45)] md:p-8">
                     <div className="max-w-2xl">
                         <p className="text-xs font-semibold uppercase tracking-[0.34em] text-slate-500">
-                            Why {siteConfig.name}
+                            Why Use {siteConfig.name}
                         </p>
                         <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
-                            Built for people who want the answer, not the clutter.
+                            Fast, accurate, and easy-to-use calculators for users around the world.
                         </h2>
+                        <p className="mt-4 text-base leading-8 text-slate-600 md:text-lg">
+                            Whether you are calculating loan payments, planning retirement savings,
+                            tracking fitness goals, or solving math problems, {siteConfig.name}
+                            provides the tools you need to complete calculations within seconds.
+                        </p>
                     </div>
 
-                    <div className="mt-8 grid gap-4 md:grid-cols-3">
-                        {featureCards.map((card) => {
-                            const Icon = card.icon;
-
-                            return (
-                                <div
-                                    key={card.title}
-                                    className="rounded-[28px] border border-white/70 bg-white/85 p-6 shadow-[0_18px_45px_-35px_rgba(15,23,42,0.35)]"
-                                >
-                                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white">
-                                        <Icon className="h-5 w-5" />
-                                    </span>
-                                    <h3 className="mt-5 text-xl font-semibold text-slate-950">
-                                        {card.title}
-                                    </h3>
-                                    <p className="mt-3 text-sm leading-7 text-slate-600">
-                                        {card.description}
-                                    </p>
-                                </div>
-                            );
-                        })}
+                    <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+                        {whyUsePoints.map((point) => (
+                            <div
+                                key={point}
+                                className="rounded-[24px] border border-white/70 bg-white/85 p-5 shadow-[0_18px_45px_-35px_rgba(15,23,42,0.35)]"
+                            >
+                                <CheckCircle2 className="h-5 w-5 text-sky-600" />
+                                <p className="mt-4 text-sm leading-7 text-slate-700">{point}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -284,22 +422,30 @@ export default async function Page() {
 
             <AdsenseAd placement="homeBottom" />
 
-            <div className="mt-14 md:mt-20 mb-10">
+            <div className="mt-14 mb-10 md:mt-20">
                 <div className="mx-auto max-w-6xl px-4">
                     <div className="overflow-hidden rounded-[36px] border border-slate-200/20 bg-[linear-gradient(140deg,#0f172a_0%,#111827_45%,#164e63_100%)] px-6 py-12 text-center shadow-[0_34px_80px_-45px_rgba(8,15,32,0.65)] md:px-10 md:py-16">
                         <p className="text-xs font-semibold uppercase tracking-[0.36em] text-sky-200">
-                            Start Calculating
+                            Explore Our Calculators
                         </p>
 
                         <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white md:text-5xl">
-                            Open the tool you need and get an answer in seconds.
+                            Start exploring our calculators today.
                         </h2>
 
-                        <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-slate-300">
-                            From EMI and mortgage planning to BMI and percentage math,
-                            {` ${siteConfig.name} `}keeps the calculator catalog fast, clear, and
-                            easy to browse.
+                        <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-slate-300">
+                            Browse our complete collection of tools and discover calculators that
+                            help you manage loans, plan investments, track health metrics, solve
+                            mathematical problems, and organize everyday life with less guesswork.
                         </p>
+
+                        <div className="mx-auto mt-8 grid max-w-4xl gap-3 text-left md:grid-cols-2 xl:grid-cols-5">
+                            {explorePoints.map((point) => (
+                                <div key={point} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm leading-7 text-slate-200">
+                                    {point}
+                                </div>
+                            ))}
+                        </div>
 
                         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                             <Button asChild size="lg" variant="secondary" className="rounded-full px-7">
