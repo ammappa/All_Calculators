@@ -40,12 +40,18 @@ const allowedTags = [
     "li",
     "ol",
     "p",
+    "table",
+    "tbody",
+    "td",
+    "th",
+    "thead",
+    "tr",
     "strong",
     "u",
     "ul",
 ];
 
-const blockTagNames = ["blockquote", "h2", "h3", "li", "ol", "p", "ul"];
+const blockTagNames = ["blockquote", "h2", "h3", "li", "ol", "p", "table", "ul"];
 
 export function slugify(value: string) {
     return value
@@ -80,6 +86,22 @@ function normalizeAnchor(tag: string) {
     }
 
     return `<a href="${href.replace(/"/g, "&quot;")}" target="_blank" rel="noopener noreferrer">`;
+}
+
+function normalizeTableCell(tag: string, tagName: "td" | "th") {
+    const colSpanMatch = tag.match(/\scolspan=(["']?)(\d+)\1/i);
+    const rowSpanMatch = tag.match(/\srowspan=(["']?)(\d+)\1/i);
+    const attributes: string[] = [];
+
+    if (colSpanMatch) {
+        attributes.push(`colspan="${colSpanMatch[2]}"`);
+    }
+
+    if (rowSpanMatch) {
+        attributes.push(`rowspan="${rowSpanMatch[2]}"`);
+    }
+
+    return attributes.length > 0 ? `<${tagName} ${attributes.join(" ")}>` : `<${tagName}>`;
 }
 
 type InlineFormatState = {
@@ -291,6 +313,10 @@ export function sanitizeBlogContentHtml(input: string) {
 
         if (normalizedTagName === "a") {
             return normalizeAnchor(tag);
+        }
+
+        if (normalizedTagName === "td" || normalizedTagName === "th") {
+            return normalizeTableCell(tag, normalizedTagName);
         }
 
         return `<${normalizedTagName}>`;

@@ -292,6 +292,12 @@ export default function RichTextEditor({
                         "[&_h3]:mt-5 [&_h3]:text-2xl [&_h3]:font-semibold",
                         "[&_a]:text-primary [&_a]:underline",
                         "[&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-6",
+                        "[&_table]:my-6 [&_table]:w-full [&_table]:border-collapse [&_table]:overflow-hidden",
+                        "[&_tbody_tr:nth-child(even)]:bg-muted/30",
+                        "[&_td]:border [&_td]:px-3 [&_td]:py-2 [&_td]:align-top",
+                        "[&_th]:border [&_th]:bg-muted [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold",
+                        "[&_thead]:bg-muted/70",
+                        "[&_tr]:border-b",
                         className
                     )}
                     onInput={syncContent}
