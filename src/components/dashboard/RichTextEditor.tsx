@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { convertPlainTextToBlogHtml, sanitizeBlogContentHtml } from "@/lib/blog-shared";
 import { cn } from "@/lib/utils";
 
 type ToolbarState = {
@@ -163,8 +164,19 @@ export default function RichTextEditor({
 
     const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
         event.preventDefault();
+
+        const html = event.clipboardData.getData("text/html");
         const text = event.clipboardData.getData("text/plain");
-        document.execCommand("insertText", false, text);
+        const sanitizedHtml = sanitizeBlogContentHtml(
+            html && html.trim() ? html : convertPlainTextToBlogHtml(text)
+        );
+
+        if (sanitizedHtml) {
+            document.execCommand("insertHTML", false, sanitizedHtml);
+        } else if (text) {
+            document.execCommand("insertText", false, text);
+        }
+
         syncContent();
     };
 

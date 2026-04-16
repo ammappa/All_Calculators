@@ -45,6 +45,8 @@ const allowedTags = [
     "ul",
 ];
 
+const blockTagNames = ["blockquote", "h2", "h3", "li", "ol", "p", "ul"];
+
 export function slugify(value: string) {
     return value
         .toLowerCase()
@@ -146,12 +148,107 @@ function normalizeInlineFormatting(input: string) {
     });
 }
 
+function closeInlineFormatting(format: InlineFormatState) {
+    let closingMarkup = "";
+
+    if (format.underline) {
+        closingMarkup += "</u>";
+    }
+
+    if (format.italic) {
+        closingMarkup += "</em>";
+    }
+
+    if (format.bold) {
+        closingMarkup += "</strong>";
+    }
+
+    return closingMarkup;
+}
+
+function normalizeFormattingTags(input: string) {
+    const formattingTagStack: InlineFormatState[] = [];
+
+    return input.replace(/<(strong|b|em|i|u)\b[^>]*>|<\/(strong|b|em|i|u)>/gi, (tag, openTag, closeTag) => {
+        if (closeTag) {
+            const format = formattingTagStack.pop();
+            return format ? closeInlineFormatting(format) : "";
+        }
+
+        const normalizedTag = String(openTag).toLowerCase();
+        const format: InlineFormatState = {
+            bold: normalizedTag === "strong" || normalizedTag === "b",
+            italic: normalizedTag === "em" || normalizedTag === "i",
+            underline: normalizedTag === "u",
+        };
+
+        formattingTagStack.push(format);
+
+        let openingMarkup = "";
+
+        if (format.bold) {
+            openingMarkup += "<strong>";
+        }
+
+        if (format.italic) {
+            openingMarkup += "<em>";
+        }
+
+        if (format.underline) {
+            openingMarkup += "<u>";
+        }
+
+        return openingMarkup;
+    });
+}
+
+function normalizeWordHtml(input: string) {
+    return input
+        .replace(/<\?xml[^>]*>/gi, "")
+        .replace(/<\/?[a-z]+:[^>]*>/gi, "")
+        .replace(/\sclass=(["'])(?:Mso|Apple-converted-space)[^"']*\1/gi, "")
+        .replace(/\sstyle=(["'])(?:(?!\1).)*mso-[^"']*\1/gi, "")
+        .replace(/<p\b[^>]*>\s*(?:&nbsp;|\u00a0|\s)*<\/p>/gi, "")
+        .replace(/&nbsp;/gi, " ");
+}
+
+function normalizeLineBreaks(input: string) {
+    const withParagraphs = input
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .split(/\n{2,}/)
+        .map((paragraph) => paragraph.trim())
+        .filter(Boolean)
+        .map((paragraph) => `<p>${paragraph.replace(/\n/g, "<br>")}</p>`)
+        .join("");
+
+    return withParagraphs || `<p>${input.replace(/\n/g, "<br>")}</p>`;
+}
+
+function collapseDuplicateBlockBoundaries(input: string) {
+    return input
+        .replace(/<(p|blockquote|h2|h3)><\/\1>/gi, "")
+        .replace(/<(p|blockquote|h2|h3)>\s*<(p|blockquote|h2|h3)>/gi, "<$2>")
+        .replace(/<\/(p|blockquote|h2|h3)>\s*<\/(p|blockquote|h2|h3)>/gi, "</$1>");
+}
+
+export function convertPlainTextToBlogHtml(input: string) {
+    const escaped = input
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    return normalizeLineBreaks(escaped);
+}
+
 export function sanitizeBlogContentHtml(input: string) {
     if (!input.trim()) {
         return "";
     }
 
-    const withoutUnsafeBlocks = normalizeInlineFormatting(input)
+    const source = /<[^>]+>/.test(input) ? input : convertPlainTextToBlogHtml(input);
+
+    const withoutUnsafeBlocks = normalizeWordHtml(normalizeFormattingTags(normalizeInlineFormatting(source)))
         .replace(/<!--[\s\S]*?-->/g, "")
         .replace(
             /<(script|style|iframe|object|embed|form|input|textarea|button|select|option|video|audio|svg|math)[^>]*>[\s\S]*?<\/\1>/gi,
@@ -163,12 +260,14 @@ export function sanitizeBlogContentHtml(input: string) {
         )
         .replace(/<div\b[^>]*>/gi, "<p>")
         .replace(/<\/div>/gi, "</p>")
+        .replace(/<font\b[^>]*>/gi, "")
+        .replace(/<\/font>/gi, "")
         .replace(/<(\/?)h1\b[^>]*>/gi, "<$1h2>")
         .replace(/<(\/?)h4\b[^>]*>/gi, "<$1h3>")
         .replace(/<(\/?)h5\b[^>]*>/gi, "<$1h3>")
         .replace(/<(\/?)h6\b[^>]*>/gi, "<$1h3>");
 
-    return withoutUnsafeBlocks.replace(/<\/?[^>]+>/g, (tag) => {
+    const sanitized = withoutUnsafeBlocks.replace(/<\/?[^>]+>/g, (tag) => {
         const nameMatch = tag.match(/^<\/?\s*([a-z0-9]+)/i);
         const tagName = nameMatch?.[1]?.toLowerCase();
 
@@ -196,6 +295,18 @@ export function sanitizeBlogContentHtml(input: string) {
 
         return `<${normalizedTagName}>`;
     });
+
+    const normalizedBlocks = collapseDuplicateBlockBoundaries(sanitized).trim();
+
+    if (!normalizedBlocks) {
+        return "";
+    }
+
+    const hasBlockMarkup = blockTagNames.some((tagName) =>
+        normalizedBlocks.toLowerCase().includes(`<${tagName}>`)
+    );
+
+    return hasBlockMarkup ? normalizedBlocks : `<p>${normalizedBlocks}</p>`;
 }
 
 export function stripHtml(value: string) {
