@@ -15,9 +15,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-export default function BlogSectionSlider() {
-    const [blogPosts, setBlogPosts] = useState<BlogPostRecord[]>([]);
-    const [loading, setLoading] = useState(true);
+type BlogSectionSliderProps = {
+    initialPosts: BlogPostRecord[];
+};
+
+export default function BlogSectionSlider({ initialPosts }: BlogSectionSliderProps) {
+    const [blogPosts] = useState<BlogPostRecord[]>(initialPosts);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isSwiping, setIsSwiping] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -28,39 +31,6 @@ export default function BlogSectionSlider() {
     });
 
     const sliderRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        let cancelled = false;
-
-        const fetchPosts = async () => {
-            try {
-                setLoading(true);
-
-                const response = await fetch("/api/blog?limit=6", {
-                    cache: "no-store",
-                });
-                const result = await response.json();
-
-                if (!response.ok || !result.success || cancelled) {
-                    return;
-                }
-
-                setBlogPosts(result.posts ?? []);
-            } catch (error) {
-                console.error("Failed to load blog posts for home page:", error);
-            } finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
-            }
-        };
-
-        void fetchPosts();
-
-        return () => {
-            cancelled = true;
-        };
-    }, []);
 
     useEffect(() => {
         const updateScreenSize = () => {
@@ -158,23 +128,6 @@ export default function BlogSectionSlider() {
         setIsSwiping(false);
     };
 
-    if (loading && blogPosts.length === 0) {
-        return (
-            <section>
-                <div className="container mx-auto space-y-4 px-4 md:px-6 2xl:max-w-[1400px]">
-                    <div className="space-y-1">
-                        <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-                            Latest Articles
-                        </h2>
-                        <p className="text-sm text-muted-foreground md:text-base">
-                            Loading articles from the blog dashboard...
-                        </p>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
     if (!blogPosts.length) {
         return null;
     }
@@ -234,6 +187,7 @@ export default function BlogSectionSlider() {
                                             src={post.imageUrl}
                                             alt={post.title}
                                             fill
+                                            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
                                             className="object-cover transition-transform duration-300 hover:scale-105"
                                         />
                                         <div className="absolute left-3 top-3">

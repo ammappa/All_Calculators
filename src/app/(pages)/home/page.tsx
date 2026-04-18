@@ -436,7 +436,7 @@ export default async function Page() {
             </div>
 
             <div className="mt-14 md:mt-20">
-                <BlogSectionSlider />
+                <BlogSectionSlider initialPosts={publishedPosts.slice(0, 6)} />
             </div>
 
             <AdsenseAd placement="homeBottom" />

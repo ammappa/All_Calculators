@@ -12,7 +12,7 @@ export default function GoogleTags({ gaMeasurementId, gtmId }: GoogleTagsProps) 
         <>
             {gtmId ? (
                 <>
-                    <Script id="gtm-script" strategy="afterInteractive">
+                    <Script id="gtm-script" strategy="lazyOnload">
                         {`
                           (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -28,9 +28,9 @@ export default function GoogleTags({ gaMeasurementId, gtmId }: GoogleTagsProps) 
                 <>
                     <Script
                         src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
-                        strategy="afterInteractive"
+                        strategy="lazyOnload"
                     />
-                    <Script id="ga-script" strategy="afterInteractive">
+                    <Script id="ga-script" strategy="lazyOnload">
                         {`
                           window.dataLayer = window.dataLayer || [];
                           function gtag(){dataLayer.push(arguments);}

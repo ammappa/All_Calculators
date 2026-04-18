@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type {
     AdsensePlacementKey,
@@ -73,10 +73,36 @@ export default function AdsenseAd({
     className,
     style,
 }: AdsenseAdProps) {
+    const adRef = useRef<HTMLModElement | null>(null);
     const [placementConfig, setPlacementConfig] = useState<AdsensePlacementSettings | null>(
         null
     );
+    const [isNearViewport, setIsNearViewport] = useState(false);
     const publisherId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+
+    useEffect(() => {
+        const element = adRef.current;
+
+        if (!element) {
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries.some((entry) => entry.isIntersecting)) {
+                    setIsNearViewport(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: "300px 0px" }
+        );
+
+        observer.observe(element);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -85,7 +111,7 @@ export default function AdsenseAd({
             setPlacementConfig(null);
             const settings = await loadAdsenseSettings();
 
-            if (!isMounted || !settings?.enabled) {
+            if (!isMounted || !isNearViewport || !settings?.enabled) {
                 setPlacementConfig(null);
                 return;
             }
@@ -100,12 +126,14 @@ export default function AdsenseAd({
             setPlacementConfig(nextConfig);
         };
 
-        void loadPlacement();
+        if (isNearViewport) {
+            void loadPlacement();
+        }
 
         return () => {
             isMounted = false;
         };
-    }, [placement]);
+    }, [isNearViewport, placement]);
 
     useEffect(() => {
         if (!placementConfig || !publisherId) {
@@ -119,11 +147,12 @@ export default function AdsenseAd({
     }, [placementConfig, publisherId]);
 
     if (!publisherId || !placementConfig) {
-        return null;
+        return <ins ref={adRef} className="block min-h-0" aria-hidden="true" />;
     }
 
     return (
         <ins
+            ref={adRef}
             key={`${placement}-${placementConfig.slot}`}
             className={`adsbygoogle ${className ?? ""}`.trim()}
             style={{ display: "block", ...style }}

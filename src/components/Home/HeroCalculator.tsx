@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { evaluate } from "mathjs";
 import { Calculator, CornerDownLeft, Delete, RotateCcw } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { evaluateSimpleExpression } from "@/lib/simple-math";
 import { cn } from "@/lib/utils";
 
 type CalculatorButton = {
@@ -119,7 +119,7 @@ export default function HeroCalculator() {
 
     function runEvaluation() {
         try {
-            const result = evaluate(expressionRef.current);
+            const result = evaluateSimpleExpression(expressionRef.current);
             const nextValue = formatResult(result);
 
             setLastAnswer(nextValue === "Error" ? lastAnswerRef.current : nextValue);
@@ -169,7 +169,7 @@ export default function HeroCalculator() {
                 event.preventDefault();
 
                 try {
-                    const result = evaluate(expressionRef.current);
+                    const result = evaluateSimpleExpression(expressionRef.current);
                     const nextValue = formatResult(result);
 
                     setLastAnswer(nextValue === "Error" ? lastAnswerRef.current : nextValue);

@@ -15,7 +15,7 @@ import { siteConfig } from "@/lib/siteConfig";
 const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
-  weight: ["400", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -75,7 +75,7 @@ export default function RootLayout({
         {adsenseClient ? (
           <Script
             async
-            strategy="afterInteractive"
+            strategy="lazyOnload"
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
             crossOrigin="anonymous"
           />
