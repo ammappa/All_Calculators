@@ -10,20 +10,21 @@ import {
     SheetContent,
     SheetDescription,
     SheetHeader,
+    SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
 
 const Navbar = () => {
     return (
         <header className="w-full border-b">
-            <div className="container lg:px-20 mx-auto flex h-16 items-center justify-between px-4">
+            <div className="container lg:px-20 mx-auto flex h-24 items-center justify-between px-4">
                 <Link href="/">
                     <Image
-                        src="/logo.png"
+                        src="/logo2.png"
                         width={500}
                         height={500}
                         alt="logo"
-                        className="w-full md:h-14 h-10"
+                        className="w-full md:h-20 h-16"
                     />
                 </Link>
 
@@ -70,12 +71,13 @@ const Navbar = () => {
                         </SheetTrigger>
                         <SheetContent side="left">
                             <SheetHeader>
+                                <SheetTitle className="sr-only">Mobile navigation menu</SheetTitle>
                                 <Image
-                                    src="/logo.png"
+                                    src="/logo2.png"
                                     width={100}
                                     height={100}
                                     alt="logo"
-                                    className="w-40 h-8"
+                                    className="w-24 h-20"
                                 />
                                 <SheetDescription>
                                     Navigate through the site using the menu below.

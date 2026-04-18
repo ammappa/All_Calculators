@@ -9,7 +9,9 @@ export const siteConfig = {
     contactEmail: "support@withinsecs.com",
     contactPhone: "",
     contactPhoneDisplay: "",
-    businessProfileUrl: "https://www.google.com/maps/search/?api=1&query=WithinSecs",
+    businessProfileUrl:
+        process.env.NEXT_PUBLIC_GOOGLE_BUSINESS_PROFILE_URL?.trim() ||
+        "https://www.google.com/maps/search/?api=1&query=WithinSecs",
     mapsEmbedUrl:
         "https://www.google.com/maps?q=WithinSecs&output=embed",
     serviceArea: "Worldwide",
