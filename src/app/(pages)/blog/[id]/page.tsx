@@ -5,7 +5,9 @@ import { notFound } from "next/navigation";
 import { CalendarIcon } from "lucide-react";
 
 import Wrapper from "@/app/Wrapper";
+import JsonLd from "@/components/seo/JsonLd";
 import { getBlogPostBySlug, getBlogPosts } from "@/lib/blog";
+import { buildBlogSchemas } from "@/lib/seo";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -63,6 +65,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
     return (
         <Wrapper>
+            <JsonLd id={`blog-post-schema-${post.id}`} data={buildBlogSchemas(post)} />
             <section className="w-full py-12">
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="grid w-full gap-8 pt-4 lg:grid-cols-3 lg:items-start">
@@ -90,7 +93,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
                                 <CardTitle className="mb-3 text-2xl">{post.title}</CardTitle>
 
-                                <p className="mb-6 text-lg leading-8 text-muted-foreground">
+                                <p className="article-summary page-summary mb-6 text-lg leading-8 text-muted-foreground">
                                     {post.excerpt}
                                 </p>
 

@@ -2,6 +2,10 @@ import "server-only";
 
 import type { Metadata } from "next";
 
+import {
+    calculatorCategoryLabels,
+    type CalculatorCategory,
+} from "@/lib/calculator-catalog";
 import { getCachedCalculatorPageContentSafe } from "@/lib/calculator-page-content-cache";
 import { siteUrl } from "@/lib/site";
 
@@ -28,6 +32,32 @@ export async function getCalculatorPageMetadata(slug: string): Promise<Metadata>
             title,
             description,
             url: canonicalUrl,
+            type: "website",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+        },
+    };
+}
+
+export function getCalculatorCategoryMetadata(category: CalculatorCategory): Metadata {
+    const label = calculatorCategoryLabels[category];
+    const path = `/calculators/${category}`;
+    const title = `${label} Calculators`;
+    const description = `Explore free ${label.toLowerCase()} calculators on WithinSecs to solve practical problems faster with clear inputs and instant results.`;
+
+    return {
+        title,
+        description,
+        alternates: {
+            canonical: path,
+        },
+        openGraph: {
+            title,
+            description,
+            url: `${siteUrl}${path}`,
             type: "website",
         },
         twitter: {

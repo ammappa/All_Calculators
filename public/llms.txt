@@ -1,0 +1,17 @@
+WithinSecs
+
+WithinSecs is a calculator website with free tools for finance, health, lifestyle, and math.
+
+Primary URLs:
+- https://www.withinsecs.com/
+- https://www.withinsecs.com/calculators
+- https://www.withinsecs.com/blog
+- https://www.withinsecs.com/search
+
+Sitemaps:
+- https://www.withinsecs.com/sitemap_index.xml
+- https://www.withinsecs.com/sitemap-pages.xml
+- https://www.withinsecs.com/sitemap-calculators.xml
+- https://www.withinsecs.com/sitemap-categories.xml
+- https://www.withinsecs.com/sitemap-blogs.xml
+- https://www.withinsecs.com/sitemap-news.xml

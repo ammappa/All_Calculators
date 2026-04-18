@@ -7,12 +7,14 @@ import { ArrowRightIcon, CalendarIcon, SearchIcon } from "lucide-react";
 
 import Wrapper from "@/app/Wrapper";
 import AdsenseAd from "@/components/AdsenseAd";
+import JsonLd from "@/components/seo/JsonLd";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { BlogPostRecord } from "@/lib/blog-shared";
+import { buildBlogListingSchemas } from "@/lib/seo";
 
 export default function Page() {
     const [search, setSearch] = useState("");
@@ -70,11 +72,12 @@ export default function Page() {
 
     return (
         <Wrapper>
+            <JsonLd id="blog-listing-schema" data={buildBlogListingSchemas(posts)} />
             <div className="relative overflow-hidden">
                 <div className="container mx-auto mt-10 px-4 md:mt-16 md:px-6 2xl:max-w-[1400px]">
                     <div className="text-center">
                         <h1 className="text-3xl font-semibold tracking-tight lg:text-4xl">Blogs</h1>
-                        <p className="mt-3 text-xl text-muted-foreground">
+                        <p className="page-summary mt-3 text-xl text-muted-foreground">
                             Articles published from the dashboard.
                         </p>
 

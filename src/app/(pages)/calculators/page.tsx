@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 
 import CalculatorCard from "@/components/Calculators/CalculatorCard";
 import ServerManagedCalculatorContent from "@/components/Calculators/ServerManagedCalculatorContent";
+import JsonLd from "@/components/seo/JsonLd";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { calculatorCategoryLabels, calculatorCategoryOrder } from "@/lib/calculator-catalog";
 import { getCachedCalculatorPageContentSafe } from "@/lib/calculator-page-content-cache";
 import { getCalculatorPageMetadata } from "@/lib/calculator-metadata";
 import { getVisibleCalculatorGroupsSafe } from "@/lib/calculator-visibility";
+import { buildCollectionPageSchemas } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -34,10 +36,21 @@ export default async function CalculatorsPage() {
 
     return (
         <>
+            <JsonLd
+                id="calculator-hub-schema"
+                data={buildCollectionPageSchemas({
+                    category: "finance",
+                    label: "Calculators",
+                    title: heading,
+                    description: intro,
+                    path: "/calculators",
+                    items: sections.flatMap((section) => section.items),
+                })}
+            />
             <div className="container mx-auto px-4 md:px-6 2xl:max-w-[1400px]">
                 <div className="mx-auto mt-8 max-w-3xl text-center md:mt-16">
                     <h1 className="text-3xl font-semibold lg:text-4xl">{heading}</h1>
-                    <p className="text-muted-foreground mt-4 text-xl">{intro}</p>
+                    <p className="page-summary text-muted-foreground mt-4 text-xl">{intro}</p>
                 </div>
             </div>
 

@@ -4,15 +4,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowRight, BrainCircuit, MessageSquare, Wrench } from "lucide-react";
+import { ArrowRight, BrainCircuit, Mail, MapPinned, MessageSquare, Wrench } from "lucide-react";
 import Link from "next/link";
 import Wrapper from '@/app/Wrapper'
 import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { toast } from "sonner";
+import { siteConfig } from "@/lib/siteConfig";
 
 
-const page = () => {
+const Page = () => {
 
     const [form, setForm] = useState({
         firstName: "",
@@ -89,6 +90,48 @@ const page = () => {
                 </div>
 
                 <div className="mx-auto mt-12 max-w-4xl">
+                    <div className="mb-6 grid gap-4 sm:grid-cols-2">
+                        <Card>
+                            <CardContent className="flex items-start gap-4 p-6">
+                                <Mail className="mt-1 h-5 w-5 text-primary" />
+                                <div>
+                                    <h2 className="text-lg font-semibold">Email support</h2>
+                                    <p className="mt-1 text-sm text-muted-foreground">
+                                        Reach the WithinSecs team directly for calculator, content,
+                                        or partnership questions.
+                                    </p>
+                                    <Link
+                                        href={`mailto:${siteConfig.contactEmail}`}
+                                        className="mt-3 inline-flex text-sm font-medium text-primary hover:underline"
+                                    >
+                                        {siteConfig.contactEmail}
+                                    </Link>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardContent className="flex items-start gap-4 p-6">
+                                <MapPinned className="mt-1 h-5 w-5 text-primary" />
+                                <div>
+                                    <h2 className="text-lg font-semibold">Find us online</h2>
+                                    <p className="mt-1 text-sm text-muted-foreground">
+                                        View our business presence on Google Maps and discover the
+                                        latest updates from WithinSecs.
+                                    </p>
+                                    <Link
+                                        href={siteConfig.businessProfileUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mt-3 inline-flex text-sm font-medium text-primary hover:underline"
+                                    >
+                                        Open Google Business Profile
+                                    </Link>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
                     <Card className="p-0">
                         <CardContent className="p-6">
                             <h2 className="mb-8 text-xl font-semibold">Fill in the form</h2>
@@ -185,6 +228,16 @@ const page = () => {
                             </form>
                         </CardContent>
                     </Card>
+                </div>
+
+                <div className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-2xl border">
+                    <iframe
+                        src={siteConfig.mapsEmbedUrl}
+                        title="WithinSecs on Google Maps"
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        className="h-[320px] w-full border-0"
+                    />
                 </div>
 
                 <div className="mt-12 grid items-center gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
@@ -306,4 +359,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

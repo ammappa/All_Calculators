@@ -1,4 +1,5 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
     ArrowRight,
     BriefcaseBusiness,
@@ -13,8 +14,7 @@ import {
 
 import Wrapper from "@/app/Wrapper";
 import AdsenseAd from "@/components/AdsenseAd";
-import BlogSectionSlider from "@/components/BlogSectionSlider";
-import HeroCalculator from "@/components/Home/HeroCalculator";
+import JsonLd from "@/components/seo/JsonLd";
 import Services from "@/components/Home/Services";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,8 +24,20 @@ import {
     groupCalculatorsByCategory,
     type CalculatorCategory,
 } from "@/lib/calculator-catalog";
+import { getBlogPosts } from "@/lib/blog";
 import { getVisibleCalculatorCatalogSafe } from "@/lib/calculator-visibility";
+import { buildHomePageSchemas } from "@/lib/seo";
 import { siteConfig } from "@/lib/siteConfig";
+
+const HeroCalculator = dynamic(() => import("@/components/Home/HeroCalculator"), {
+    loading: () => (
+        <div className="min-h-[620px] rounded-[32px] border border-slate-200/80 bg-white/70 p-6 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)] backdrop-blur-xl" />
+    ),
+});
+
+const BlogSectionSlider = dynamic(() => import("@/components/BlogSectionSlider"), {
+    loading: () => <div className="min-h-[260px]" />,
+});
 
 const featuredPriority = [
     "emi-calculator",
@@ -133,7 +145,10 @@ const explorePoints = [
 ];
 
 export default async function Page() {
-    const visibleCalculators = await getVisibleCalculatorCatalogSafe();
+    const [visibleCalculators, publishedPosts] = await Promise.all([
+        getVisibleCalculatorCatalogSafe(),
+        getBlogPosts({ publishedOnly: true }),
+    ]);
     const groupedCalculators = groupCalculatorsByCategory(visibleCalculators);
     const prioritizedFeaturedCalculators = featuredPriority
         .map((slug) => visibleCalculators.find((calculator) => calculator.slug === slug))
@@ -173,6 +188,10 @@ export default async function Page() {
 
     return (
         <Wrapper className="overflow-x-hidden">
+            <JsonLd
+                id="home-page-schema"
+                data={buildHomePageSchemas(visibleCalculators.length, publishedPosts.length)}
+            />
             <section className="relative overflow-hidden pb-14 pt-8 md:pb-24 md:pt-12">
                 <div className="absolute inset-x-0 top-0 -z-10 h-[42rem] bg-[linear-gradient(180deg,rgba(239,246,255,0.95)_0%,rgba(255,255,255,0.9)_55%,rgba(255,255,255,0)_100%)]" />
                 <div className="absolute left-0 top-10 -z-10 h-72 w-72 rounded-full bg-sky-200/50 blur-3xl" />
@@ -191,14 +210,14 @@ export default async function Page() {
                             <h1 className="max-w-4xl text-5xl font-bold tracking-tight text-balance text-slate-950 md:text-6xl xl:text-6xl">
                                 Free online calculators for finance, health, math, and everyday life.
                             </h1>
-                            <p className="max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
+                            <p className="page-summary max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
                                 Welcome to {siteConfig.name}, a growing platform of free online
                                 calculators built to solve financial, health, math, and daily
                                 planning problems within seconds. Estimate loan payments, review
                                 investment returns, calculate calorie needs, or plan retirement
                                 savings from one clear and easy-to-use place.
                             </p>
-                            <p className="max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
+                            <p className="page-summary-secondary max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
                                 Our mission is simple: make calculations easy for everyone. From
                                 personal finance to scientific math, {siteConfig.name} helps
                                 individuals, students, professionals, and businesses make smarter

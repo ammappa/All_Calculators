@@ -1,10 +1,13 @@
 import Link from "next/link";
 import {
+    FaEnvelope,
     FaInstagram,
     FaLinkedinIn,
     FaMedium,
     FaPinterestP,
+    FaPhone,
     FaQuora,
+    FaStore,
     FaXTwitter,
 } from "react-icons/fa6";
 
@@ -105,6 +108,37 @@ export default function Footer() {
                 </div>
 
                 <div className="flex flex-col gap-6 pt-8 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <p className="text-sm font-medium text-slate-900">Contact</p>
+                        <div className="mt-3 flex flex-wrap gap-3">
+                            <Link
+                                href={`mailto:${siteConfig.contactEmail}`}
+                                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-950"
+                            >
+                                <FaEnvelope className="h-4 w-4" />
+                                {siteConfig.contactEmail}
+                            </Link>
+                            {siteConfig.contactPhone ? (
+                                <Link
+                                    href={`tel:${siteConfig.contactPhone}`}
+                                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-950"
+                                >
+                                    <FaPhone className="h-4 w-4" />
+                                    {siteConfig.contactPhoneDisplay || siteConfig.contactPhone}
+                                </Link>
+                            ) : null}
+                            <Link
+                                href={siteConfig.businessProfileUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-950"
+                            >
+                                <FaStore className="h-4 w-4" />
+                                Google Business Profile
+                            </Link>
+                        </div>
+                    </div>
+
                     <div>
                         <p className="text-sm font-medium text-slate-900">Social Profiles</p>
                         <div className="mt-3 flex flex-wrap gap-3">
