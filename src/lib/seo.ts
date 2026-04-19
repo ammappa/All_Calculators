@@ -390,24 +390,6 @@ export function buildCalculatorSchemas(input: {
         },
         {
             "@context": "https://schema.org",
-            "@type": "Product",
-            name,
-            description,
-            brand: {
-                "@type": "Organization",
-                name: siteConfig.legalName,
-            },
-            category: input.item.category,
-            url: toAbsoluteUrl(input.item.path),
-            offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "USD",
-                availability: "https://schema.org/InStock",
-            },
-        },
-        {
-            "@context": "https://schema.org",
             "@type": "Dataset",
             name: `${name} calculation data`,
             description: `Input and output data model used by the ${name} on WithinSecs.`,
