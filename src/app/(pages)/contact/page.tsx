@@ -302,7 +302,7 @@ const Page = () => {
                     </Link>
 
                     <Link
-                        href={"#"}
+                        href={"/calculators"}
                         className="group hover:bg-muted flex h-full flex-col rounded-lg p-4 text-center sm:p-6"
                     >
                         <Wrench className="text-muted-foreground mx-auto size-9" />
