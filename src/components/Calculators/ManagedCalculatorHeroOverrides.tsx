@@ -21,11 +21,11 @@ function updateElementText(element: Element | null, nextValue: string) {
         return;
     }
 
-    if (!element.dataset.managedOriginalText) {
-        element.dataset.managedOriginalText = element.textContent ?? "";
+    if (!element.dataset.managedOriginalHtml) {
+        element.dataset.managedOriginalHtml = element.innerHTML;
     }
 
-    element.textContent = nextValue || element.dataset.managedOriginalText;
+    element.innerHTML = nextValue || element.dataset.managedOriginalHtml;
 }
 
 function findIntroParagraph(root: Element, heading: HTMLHeadingElement) {

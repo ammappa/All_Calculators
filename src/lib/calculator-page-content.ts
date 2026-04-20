@@ -132,11 +132,11 @@ function serializeCalculatorPageContent(
     const cardSubTitle = String(source?.cardSubTitle ?? "").trim();
     const cardDescription = String(source?.cardDescription ?? "").trim();
     const pageHeading = String(source?.pageHeading ?? "").trim();
-    const pageIntro = String(source?.pageIntro ?? "").trim();
+    const pageIntro = sanitizeBlogContentHtml(String(source?.pageIntro ?? ""));
     const seoTitle = String(source?.seoTitle ?? "").trim();
     const seoDescription = String(source?.seoDescription ?? "").trim();
     const contentTitle = String(source?.contentTitle ?? "").trim();
-    const contentIntro = String(source?.contentIntro ?? "").trim();
+    const contentIntro = sanitizeBlogContentHtml(String(source?.contentIntro ?? ""));
     const contentHtml = sanitizeBlogContentHtml(String(source?.contentHtml ?? ""));
     const hasCardOverrides =
         cardTitle.length > 0 || cardSubTitle.length > 0 || cardDescription.length > 0;
@@ -261,11 +261,11 @@ export async function updateCalculatorPageContent(
     const cardSubTitle = String(input.cardSubTitle ?? "").trim();
     const cardDescription = String(input.cardDescription ?? "").trim();
     const pageHeading = String(input.pageHeading ?? "").trim();
-    const pageIntro = String(input.pageIntro ?? "").trim();
+    const pageIntro = sanitizeBlogContentHtml(String(input.pageIntro ?? ""));
     const seoTitle = String(input.seoTitle ?? "").trim();
     const seoDescription = String(input.seoDescription ?? "").trim();
     const contentTitle = String(input.contentTitle ?? "").trim();
-    const contentIntro = String(input.contentIntro ?? "").trim();
+    const contentIntro = sanitizeBlogContentHtml(String(input.contentIntro ?? ""));
     const contentHtml = sanitizeBlogContentHtml(String(input.contentHtml ?? ""));
     const faqItems = normalizeFaqItems(input.faqItems);
     const hasManagedContent =

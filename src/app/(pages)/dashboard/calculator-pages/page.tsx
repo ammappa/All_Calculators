@@ -619,14 +619,10 @@ export default function DashboardCalculatorPagesPage() {
 
                                     <div className="space-y-2">
                                         <Label htmlFor="page-intro">Top Intro Paragraph</Label>
-                                        <Textarea
-                                            id="page-intro"
+                                        <RichTextEditor
                                             value={draft.pageIntro}
-                                            onChange={(event) =>
-                                                updateDraft("pageIntro", event.target.value)
-                                            }
+                                            onChange={(value) => updateDraft("pageIntro", value)}
                                             placeholder="Leave blank to keep the current intro paragraph"
-                                            className="min-h-24"
                                         />
                                     </div>
                                 </div>
@@ -701,14 +697,10 @@ export default function DashboardCalculatorPagesPage() {
 
                                     <div className="space-y-2">
                                         <Label htmlFor="content-intro">Bottom Section Intro</Label>
-                                        <Textarea
-                                            id="content-intro"
+                                        <RichTextEditor
                                             value={draft.contentIntro}
-                                            onChange={(event) =>
-                                                updateDraft("contentIntro", event.target.value)
-                                            }
+                                            onChange={(value) => updateDraft("contentIntro", value)}
                                             placeholder="Add a short explanation for the section."
-                                            className="min-h-24"
                                         />
                                     </div>
 
