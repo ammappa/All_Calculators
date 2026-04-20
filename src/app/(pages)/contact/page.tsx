@@ -236,7 +236,7 @@ const Page = () => {
                         title="WithinSecs on Google Maps"
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
-                        className="h-[320px] w-full border-0"
+                        className="h-[320px] md:h-[420px] w-full border-0"
                     />
                 </div>
 
