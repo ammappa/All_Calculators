@@ -11,6 +11,7 @@ import {
     ListOrdered,
     Pilcrow,
     Quote,
+    Table2,
     Underline,
 } from "lucide-react";
 
@@ -162,6 +163,37 @@ export default function RichTextEditor({
         runCommand("createLink", href);
     };
 
+    const handleInsertTable = () => {
+        const rowInput = window.prompt("How many rows do you want in the table?", "3");
+        const columnInput = window.prompt("How many columns do you want in the table?", "3");
+
+        const rows = Number.parseInt(rowInput ?? "", 10);
+        const columns = Number.parseInt(columnInput ?? "", 10);
+
+        if (!Number.isInteger(rows) || !Number.isInteger(columns) || rows < 1 || columns < 1) {
+            window.alert("Please enter valid row and column counts greater than 0.");
+            return;
+        }
+
+        const headerCells = Array.from(
+            { length: columns },
+            (_, index) => `<th>Heading ${index + 1}</th>`
+        ).join("");
+
+        const bodyRows = Array.from({ length: Math.max(rows - 1, 0) }, (_, rowIndex) => {
+            const cells = Array.from(
+                { length: columns },
+                (_, columnIndex) => `<td>Row ${rowIndex + 1} Col ${columnIndex + 1}</td>`
+            ).join("");
+
+            return `<tr>${cells}</tr>`;
+        }).join("");
+
+        const tableHtml = `<table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table><p><br></p>`;
+
+        runCommand("insertHTML", tableHtml);
+    };
+
     const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
         event.preventDefault();
 
@@ -272,6 +304,15 @@ export default function RichTextEditor({
                     onClick={handleAddLink}
                 >
                     <Link2 className="h-4 w-4" />
+                </Button>
+                <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onMouseDown={handleToolbarMouseDown}
+                    onClick={handleInsertTable}
+                >
+                    <Table2 className="h-4 w-4" />
                 </Button>
             </div>
 
