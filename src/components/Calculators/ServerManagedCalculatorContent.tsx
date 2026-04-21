@@ -31,7 +31,7 @@ export default function ServerManagedCalculatorContent({
 
                 {item.contentHtml ? (
                     <div
-                        className="mt-8 space-y-5 text-[1.05rem] leading-8 text-card-foreground md:text-lg [&_blockquote]:border-l-4 [&_blockquote]:border-primary/30 [&_blockquote]:pl-5 [&_blockquote]:italic [&_b]:font-semibold [&_h2]:mt-8 [&_h2]:text-3xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-2xl [&_h3]:font-semibold [&_li]:mb-3 [&_ol]:list-decimal [&_ol]:pl-7 [&_p]:mb-5 [&_strong]:font-semibold [&_table]:mt-6 [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-slate-200 [&_td]:px-4 [&_td]:py-3 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_ul]:list-disc [&_ul]:pl-7"
+                        className="mt-8 space-y-5 text-[1.05rem] leading-8 text-card-foreground md:text-lg [&_a]:text-primary [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-primary/30 [&_blockquote]:pl-5 [&_blockquote]:italic [&_b]:font-semibold [&_h2]:mt-8 [&_h2]:text-3xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-2xl [&_h3]:font-semibold [&_li]:mb-3 [&_ol]:list-decimal [&_ol]:pl-7 [&_p]:mb-5 [&_strong]:font-semibold [&_table]:mt-6 [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-slate-200 [&_td]:px-4 [&_td]:py-3 [&_th]:border [&_th]:border-slate-200 [&_th]:bg-slate-50 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_ul]:list-disc [&_ul]:pl-7"
                         dangerouslySetInnerHTML={{
                             __html: item.contentHtml,
                         }}
