@@ -17,14 +17,14 @@ const calculatorLinks = [
     { label: "Mortgage Calculator", href: "/calculators/mortgage-calculator" },
     { label: "Compound Interest Calculator", href: "/calculators/compound-interest-calculator" },
     { label: "Loan Calculator", href: "/calculators/emi-calculator" },
-    { label: "Crypto Profit Calculator", href: "/calculators/currency-converter" },
+    { label: "Currency Converter", href: "/calculators/currency-converter" },
     { label: "Retirement Calculator", href: "/calculators/pension-calculator" },
     { label: "Scientific Calculator", href: "/calculators/math/scientific-calculator" },
 ];
 
 const toolLinks = [
-    { label: "Salary After Tax Calculator", href: "/calculators/annual-income" },
-    { label: "Freelance Rate Calculator", href: "/calculators/lifestyle/commission-calculator" },
+    { label: "Annual Income Calculator", href: "/calculators/annual-income" },
+    { label: "Commission Calculator", href: "/calculators/lifestyle/commission-calculator" },
     { label: "TDEE Calculator", href: "/calculators/health/tdee-calculator" },
     { label: "Ideal Weight Calculator", href: "/calculators/health/ideal-weight-calculator" },
     { label: "Age Calculator", href: "/calculators/lifestyle/age-calculator" },
