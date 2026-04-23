@@ -73,6 +73,9 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#0f172a" />
         {adsenseClient ? (
+          <meta name="google-adsense-account" content={adsenseClient} />
+        ) : null}
+        {adsenseClient ? (
           <Script
             async
             strategy="lazyOnload"
