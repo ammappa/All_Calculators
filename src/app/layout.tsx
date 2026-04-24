@@ -75,14 +75,8 @@ export default function RootLayout({
         {adsenseClient ? (
           <meta name="google-adsense-account" content={adsenseClient} />
         ) : null}
-        {adsenseClient ? (
-          <Script
-            async
-            strategy="lazyOnload"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-            crossOrigin="anonymous"
-          />
-        ) : null}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7990460519448609"
+     crossorigin="anonymous"></script>
         <GoogleTags gaMeasurementId={gaMeasurementId} gtmId={gtmId} />
         <JsonLd
           id="global-site-schema"
