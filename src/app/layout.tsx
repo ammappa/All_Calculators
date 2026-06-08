@@ -71,11 +71,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.variable}>
       <head>
+        <meta name="fo-verify" content="27635479-04ee-4dc6-811c-900e961764ce" />
         <meta name="theme-color" content="#0f172a" />
         {adsenseClient ? (
           <meta name="google-adsense-account" content={adsenseClient} />
         ) : null}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7990460519448609"
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1246463477199418"
      crossorigin="anonymous"></script>
         <GoogleTags gaMeasurementId={gaMeasurementId} gtmId={gtmId} />
         <JsonLd
